@@ -18,8 +18,14 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
+    - name: Install Ninja
+      run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+    - name: Verify Ninja Installation
+      run: ninja --version
+
     - name: Run Build
-      run: npm run build
+      run: ninja
 
     - name: Run Tests
       run: npm test
