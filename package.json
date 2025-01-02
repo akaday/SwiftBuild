@@ -1,0 +1,26 @@
+{
+  "name": "swiftbuild",
+  "version": "1.0.0",
+  "description": "A project using Ninja for building",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest --coverage",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "sonar": "sonar-scanner"
+  },
+  "dependencies": {
+    "jest": "^27.0.0",
+    "jest-cli": "^27.0.0",
+    "nyc": "^15.0.0",
+    "codecov": "^3.8.0",
+    "eslint": "^7.0.0",
+    "prettier": "^2.0.0",
+    "sonar-scanner": "^3.1.0",
+    "husky": "^6.0.0"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
+}
