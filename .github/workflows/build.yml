@@ -15,8 +15,24 @@ jobs:
       with:
         node-version: '14'
 
+    - name: Cache node_modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
     - name: Install Dependencies
       run: npm install
+
+    - name: Cache Ninja
+      uses: actions/cache@v2
+      with:
+        path: /usr/bin/ninja
+        key: ${{ runner.os }}-ninja-${{ hashFiles('**/build.ninja') }}
+        restore-keys: |
+          ${{ runner.os }}-ninja-
 
     - name: Install Ninja
       run: sudo apt-get update && sudo apt-get install -y ninja-build
@@ -24,8 +40,27 @@ jobs:
     - name: Verify Ninja Installation
       run: ninja --version
 
+    - name: Run Lint
+      run: npm run lint
+
     - name: Run Build
       run: ninja
 
     - name: Run Tests
       run: npm test
+
+    - name: Set up Docker
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker.io
+        sudo systemctl start docker
+        sudo systemctl enable docker
+
+    - name: Build Docker Image
+      if: runner.os == 'Linux'
+      run: docker build -t my-app .
+
+    - name: Run Docker Container
+      if: runner.os == 'Linux'
+      run: docker run my-app
