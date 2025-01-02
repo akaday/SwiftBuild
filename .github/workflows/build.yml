@@ -64,3 +64,28 @@ jobs:
     - name: Run Docker Container
       if: runner.os == 'Linux'
       run: docker run my-app
+
+    - name: Generate Code Coverage Report
+      run: npm test -- --coverage
+
+    - name: Upload Code Coverage Report
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Run SonarQube Scanner
+      run: npm run sonar
+
+    - name: Deploy to Staging Environment
+      run: echo "Deploying to staging environment..."
+
+    - name: Run Integration Tests
+      run: npm run test:integration
+
+    - name: Notify Build Success
+      if: success()
+      run: echo "Build succeeded!"
+
+    - name: Notify Build Failure
+      if: failure()
+      run: echo "Build failed!"
